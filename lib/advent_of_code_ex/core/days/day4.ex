@@ -8,8 +8,11 @@ alias AdventOfCodeEx.Core.Helpers.Map2D
     Map2D.count_with_index(map, fn index, val -> less_than_four_trees(map, index, val) end)
   end
 
-  def part_2(_input) do
-    :unimplemented
+  def part_2(input) do
+
+      input
+      |> convert_to_map()
+      |> count_remove_while(0)
   end
 
   def convert_to_map(input) do
@@ -31,4 +34,16 @@ alias AdventOfCodeEx.Core.Helpers.Map2D
     count < 4
   end
   def less_than_four_trees(_, _, _), do: false
+
+
+  def count_remove_while(map, acc) do
+    indices = Map2D.find_all_indices_w_index(map, fn index, val -> less_than_four_trees(map, index, val) end)
+    cond do
+      length(indices) == 0 -> acc
+      true ->
+        new_map = indices |> Enum.reduce(map, fn {x, y}, acc -> Map2D.update(acc, x, y, ".", fn _ -> "." end) end)
+
+        count_remove_while(new_map, acc + length(indices))
+    end
+  end
 end

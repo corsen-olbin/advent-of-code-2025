@@ -59,6 +59,12 @@ defmodule AdventOfCodeEx.Core.Helpers.Map2D do
     end)
   end
 
+  def find_all_indices_w_index(map, func?) do
+    Enum.reduce(map, [], fn {x, v}, acc ->
+      Enum.reduce(v, acc, fn {y, v2}, acc2 -> if func?.({x, y}, v2), do: [{x ,y} | acc2], else: acc2 end)
+    end)
+  end
+
   def list2d_to_map2d(lists) do
     lists
     |> Enum.with_index
